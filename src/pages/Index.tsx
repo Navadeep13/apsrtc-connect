@@ -5,7 +5,9 @@ import { SeatSelection } from '@/components/SeatSelection';
 import { PassengerDetails } from '@/components/PassengerDetails';
 import { BookingConfirmation } from '@/components/BookingConfirmation';
 import { routes } from '@/data/busData';
+import { bookingService } from '@/services/bookingService';
 import { useToast } from '@/hooks/use-toast';
+import { Link } from 'react-router-dom';
 import heroImage from '@/assets/hero-bus.jpg';
 
 interface SearchFormData {
@@ -91,6 +93,9 @@ const Index = () => {
       totalAmount: amount
     };
     
+    // Save booking to localStorage
+    bookingService.saveBooking(booking);
+    
     setBookingData(booking);
     setStep('confirmation');
     
@@ -161,21 +166,29 @@ const Index = () => {
       <header className="bg-gradient-hero text-white py-6 px-4 shadow-strong">
         <div className="container mx-auto">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div className="text-2xl">🚌</div>
               <div>
                 <h1 className="text-2xl font-bold">APSRTC Online Booking</h1>
                 <p className="text-sm opacity-90">Andhra Pradesh State Road Transport Corporation</p>
               </div>
-            </div>
-            {step !== 'search' && (
-              <button
-                onClick={handleNewBooking}
-                className="text-sm underline hover:no-underline transition-all duration-200"
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link 
+                to="/bookings" 
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-200 border border-white/20"
               >
-                New Booking
-              </button>
-            )}
+                <span className="text-sm font-medium">My Bookings</span>
+              </Link>
+              {step !== 'search' && (
+                <button
+                  onClick={handleNewBooking}
+                  className="text-sm underline hover:no-underline transition-all duration-200"
+                >
+                  New Booking
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </header>
